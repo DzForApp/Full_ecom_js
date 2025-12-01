@@ -1,13 +1,32 @@
 import { Controller, Get } from '@nestjs/common';
+import { InjectConnection } from '@nestjs/typeorm';
+import { Connection } from 'typeorm';
 
 @Controller('health')
 export class HealthController {
-    @Get()
-    check() {
-        return {
-            status: 'ok',
-            message: 'NestJS server is running successfully',
-            timestamp: new Date().toISOString(),
-        }
+  constructor(
+    @InjectConnection()
+    private readonly connection: Connection,
+  ) {}
+
+  @Get()
+  async check() {
+    try {
+      await this.connection.query('SELECT 1');
+      
+      return {
+        status: 'ok',
+        database: 'connected',
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime(),
+      };
+    } catch (error) {
+      return {
+        status: 'error',
+        database: 'disconnected',
+        error: error.message,
+        timestamp: new Date().toISOString(),
+      };
     }
+  }
 }

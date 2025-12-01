@@ -1,47 +1,120 @@
-import { Injectable, BadRequestException, UnauthorizedException } from '@nestjs/common';
+import { Injectable, BadRequestException, UnauthorizedException, Logger } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt';
-import { CreateUserDto } from '../users/dto/create-user.dto';
+import * as bcrypt from 'bcryptjs';
+import { LoginDto } from './dto/login.dto';
+import { RegisterDto } from './dto/register.dto';
+import { UserRole } from '../users/entities/user.entity';
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
+
   constructor(
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
   ) {}
 
-  async validateUser(email: string, password: string) {
+  async validateUser(email: string, plainPassword: string): Promise<any> {
     const user = await this.usersService.findByEmail(email);
-    if (!user) throw new UnauthorizedException('Invalid credentials');
+    if (!user) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
 
-    const match = await bcrypt.compare(password, user.password);
-    if (!match) throw new UnauthorizedException('Invalid credentials');
+    // Comparer les mots de passe
+    const isPasswordValid = await bcrypt.compare(plainPassword, user.password);
+    if (!isPasswordValid) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
 
-    // ✅ On retourne le user sans son password pour sécurité
-    const { password: _, ...safeUser } = user;
-    return safeUser;
+    // Retourner l'utilisateur sans le mot de passe
+    const { password, ...result } = user;
+    return result;
   }
 
-  async register(dto: CreateUserDto) {
-    const existing = await this.usersService.findByEmail(dto.email);
-    if (existing) throw new BadRequestException('Email already in use');
+  async register(registerDto: RegisterDto): Promise<{
+    message: string;
+    user: {
+      id: string;
+      email: string;
+      nameEn: string;
+      nameAr: string;
+      role: string;
+    };
+    access_token: string;
+  }> {
+    // Vérifier si l'utilisateur existe déjà
+    const existingUser = await this.usersService.findByEmail(registerDto.email);
+    if (existingUser) {
+      throw new BadRequestException('Email already in use');
+    }
 
-    const hash = await bcrypt.hash(dto.password, 10);
-    const user = await this.usersService.create({ ...dto, password: hash });
+    // Hasher le mot de passe
+    const hashedPassword = await bcrypt.hash(registerDto.password, 10);
+    this.logger.debug(`Password hash created`);
 
-    const token = await this.generateToken(user);
-    return { message: 'User registered successfully', token };
+    // Créer l'utilisateur
+    const userData ={
+      email: registerDto.email,
+      password: hashedPassword,  // HASHÉ !
+      nameEn: registerDto.nameEn,
+      nameAr: registerDto.nameAr,
+      phone: registerDto.phone,
+      role: registerDto.role || UserRole.USER,
+    }
+    const user = await this.usersService.create(userData);
+
+    // Générer le token JWT
+    const payload = { 
+      sub: user.id, 
+      email: user.email, 
+      role: user.role 
+    };
+    const accessToken = this.jwtService.sign(payload);
+
+    return {
+      message: 'User registered successfully',
+      user: {
+        id: user.id,
+        email: user.email,
+        nameEn: user.name_en,
+        nameAr: user.name_ar,
+        role: user.role,
+      },
+      access_token: accessToken,
+    };
   }
 
-  async login(email: string, password: string) {
-    const user = await this.validateUser(email, password); // ✅ on réutilise la fonction
-    const token = await this.generateToken(user);
-    return { message: 'Login successful', token };
-  }
+  async login(loginDto: LoginDto): Promise<{
+    message: string;
+    user: {
+      id: string;
+      email: string;
+      nameEn: string;
+      nameAr: string;
+      role: string;
+    };
+    access_token: string;
+  }> {
+    const user = await this.validateUser(loginDto.email, loginDto.password);
 
-  private async generateToken(user: any) {
-    const payload = { sub: user.id, email: user.email, role: user.role };
-    return this.jwtService.signAsync(payload);
+    const payload = { 
+      sub: user.id, 
+      email: user.email, 
+      role: user.role 
+    };
+    const accessToken = this.jwtService.sign(payload);
+
+    return {
+      message: 'Login successful',
+      user: {
+        id: user.id,
+        email: user.email,
+        nameEn: user.nameEn,
+        nameAr: user.nameAr,
+        role: user.role,
+      },
+      access_token: accessToken,
+    };
   }
 }

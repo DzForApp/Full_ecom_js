@@ -1,17 +1,24 @@
 version: '3.8'
-
 services:
   postgres:
-    image: postgres:15
-    container_name: ecom_postgres
-    restart: always
+    image: postgres:15-alpine
+    container_name: store-db
     environment:
+      POSTGRES_DB: dbstore
       POSTGRES_USER: store
       POSTGRES_PASSWORD: Store25
-      POSTGRES_DB: dbstore
     ports:
       - "5432:5432"
     volumes:
-      - ./pgdata:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d
+    networks:
+      - store-network
+    restart: unless-stopped
+
 volumes:
-  pgdata:
+  postgres_data:
+
+networks:
+  store-network:
+    driver: bridge
