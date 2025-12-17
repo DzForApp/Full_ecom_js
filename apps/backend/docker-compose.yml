@@ -1,4 +1,4 @@
-version: '3.8'
+
 services:
   postgres:
     image: postgres:15-alpine
@@ -14,7 +14,7 @@ services:
       - ./init-scripts:/docker-entrypoint-initdb.d
     networks:
       - store-network
-    restart: unless-stopped
+    #restart: unless-stopped
 
 volumes:
   postgres_data:

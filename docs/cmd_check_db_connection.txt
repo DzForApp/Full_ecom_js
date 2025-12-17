@@ -1,0 +1,35 @@
+Commandes pour résoudre les problèmes d'accès
+1-Vérifier si le conteneur tourne :
+------------------------------
+    docker ps
+
+2-Vérifier les logs PostgreSQL :
+------------------------------
+    docker logs auto-parts-db
+
+3-Se connecter directement à la base :
+------------------------------
+    docker exec -it auto-parts-db psql -U admin -d autoparts
+
+4-Vérifier les réseaux Docker :
+------------------------------
+    docker network ls
+
+5-Redémarrer les services :
+------------------------------
+    docker-compose down
+    docker-compose up -d
+
+Étape 1 : Arrêter et nettoyer
+bash
+# Arrêter tous les conteneurs
+
+    docker-compose down
+
+# Supprimer le volume problématique (si existant)
+
+    docker volume rm backend_postgres_data
+
+# Vérifier les volumes
+
+    docker volume ls

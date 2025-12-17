@@ -1,0 +1,1 @@
+SELECT DISTINCT dawr FROM users;

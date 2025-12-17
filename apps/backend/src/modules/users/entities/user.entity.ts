@@ -36,9 +36,9 @@ export class User {
   })
   role: UserRole;
 
-  @Column({ default: true })
+  @Column({ default: true, name: 'is_active' })
   isActive: boolean;
-
+/*
   @CreateDateColumn()
   createdAt: Date;
 
@@ -47,7 +47,7 @@ export class User {
 
   @BeforeInsert()
   emailToLowerCase() {
-    this.email = this.email.toLowerCase();
-  }
+    this.email = this.email.toLowerCase();  
+  } */
 }
 export default User

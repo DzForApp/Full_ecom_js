@@ -14,10 +14,7 @@ export class UsersService {
     private usersRepository: Repository<User>,
   ) {}
 
-   // CORRECTION : Retourne User[], pas User
-  async findAll(): Promise<User[]> {
-    return await this.usersRepository.find();
-  }
+
 ///////////////////////////******************************CREATE ************************* */
   
 async create(createUserDto: CreateUserDto): Promise<User> {
@@ -43,31 +40,7 @@ async create(createUserDto: CreateUserDto): Promise<User> {
     return savedUser ;
   }
 
-  async findByEmail(email: string): Promise<User | null> {
-    return await this.usersRepository.findOne({ 
-      where: { email: email.toLowerCase() } 
-    });
-  }
-
-  async findOne(id: string): Promise<User> {
-    const user = await this.usersRepository.findOne({ where: { id } });
-    if (!user) {
-      throw new NotFoundException(`User with ID ${id} not found`);
-    }
-    return user;
-  }
-
-  async validateUser(email: string, plainPassword: string): Promise<User | null> {
-    const user = await this.findByEmail(email);
-    
-    if (user && await bcrypt.compare(plainPassword, user.password)) {
-      return user;
-    }
-    
-    return null;
-  }
-
-  async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
+async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
     const user = await this.findOne(id);
     
     // Hasher le mot de passe si fourni
@@ -79,8 +52,43 @@ async create(createUserDto: CreateUserDto): Promise<User> {
     return await this.findOne(id);
   }
 
-  async remove(id: string): Promise<void> {
+async remove(id: string): Promise<void> {
     const user = await this.findOne(id);
     await this.usersRepository.remove(user);
   }
+     // CORRECTION : Retourne User[], pas User
+async findAll(): Promise<User[]> {
+    return await this.usersRepository.find();
+  }
+async findByEmail(email: string): Promise<User | null> {
+    return await this.usersRepository.findOne({ 
+      where: { email: email.toLowerCase() } 
+    });
+  }
+
+async findOne(id: string): Promise<User> {
+  console.log('👤 UsersService.findOne called with ID:', id);
+  
+  const user = await this.usersRepository.findOne({ where: { id } });
+  
+  if (!user) {
+    console.log('❌ User not found for ID:', id);
+    throw new NotFoundException(`User with ID ${id} not found`);
+  }
+  
+  console.log('✅ User found:', user.email);
+  return user;
+}
+
+async validateUser(email: string, plainPassword: string): Promise<User | null> {
+    const user = await this.findByEmail(email);
+    
+    if (user && await bcrypt.compare(plainPassword, user.password)) {
+      return user;
+    }
+    
+    return null;
+  }
+
+  
 }

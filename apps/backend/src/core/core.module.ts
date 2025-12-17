@@ -26,10 +26,12 @@ import { TypedConfigService } from './config/config.service';
           password: db.password,
           database: db.database,
           entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-          synchronize: configService.app.nodeEnv === 'development',
+          synchronize: false,
+          //configService.app.nodeEnv === 'development',
           logging: configService.app.nodeEnv === 'development',
           retryDelay: 3000,
           retryAttempts: 10,
+          migrations: ['src/migrations/*{.ts,.js}'],
           autoLoadEntities: true,
         };
       },

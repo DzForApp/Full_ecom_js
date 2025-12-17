@@ -1,4 +1,4 @@
-import { IsEmail, IsString, MinLength, IsOptional, IsPhoneNumber } from 'class-validator';
+import { IsEmail, IsString, MinLength, IsOptional, IsPhoneNumber, isBoolean, IsBoolean } from 'class-validator';
 import { UserRole } from 'src/modules/users/entities/user.entity';
 
 export class RegisterDto {
@@ -24,4 +24,7 @@ export class RegisterDto {
   @IsOptional()
   @IsString()
   role?: UserRole;
+
+  @IsBoolean()
+  isActive: boolean;
 }

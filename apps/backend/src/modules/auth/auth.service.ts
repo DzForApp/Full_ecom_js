@@ -16,20 +16,38 @@ export class AuthService {
   ) {}
 
   async validateUser(email: string, plainPassword: string): Promise<any> {
-    const user = await this.usersService.findByEmail(email);
-    if (!user) {
-      throw new UnauthorizedException('Invalid credentials');
-    }
+    
+  console.log('🔍 validateUser called with:', email);
+  const user = await this.usersService.findByEmail(email);
+  console.log('🔍 User found:', user ? 'YES' : 'NO');
+  if (!user) {
+    console.log('❌ User not found for email:', email);
+    throw new UnauthorizedException('Invalid credentials');
+  }
 
+  console.log('🔍 User password field:', user.password ? 'EXISTS' : 'MISSING');
+  console.log('🔍 Password hash (first 30 chars):', user.password?.substring(0, 30));
+  if (!user.password) {
+    console.log('❌ User has no password field');
+    throw new UnauthorizedException('Invalid credentials - no password stored');
+  }
+  // Vérifier le format du hash
+  if (!user.password.startsWith('$2a$') && !user.password.startsWith('$2b$')) {
+    console.log('❌ Invalid hash format:', user.password.substring(0, 20));
+    throw new UnauthorizedException('Invalid password format');
+  }
     // Comparer les mots de passe
-    const isPasswordValid = await bcrypt.compare(plainPassword, user.password);
-    if (!isPasswordValid) {
-      throw new UnauthorizedException('Invalid credentials');
-    }
+  const isPasswordValid = await bcrypt.compare(plainPassword, user.password);
+  console.log('🔍 Password comparison result:', isPasswordValid);
+  
+  if (!isPasswordValid) {
+    throw new UnauthorizedException('Invalid credentials');
+  }
 
     // Retourner l'utilisateur sans le mot de passe
-    const { password, ...result } = user;
-    return result;
+   const { password, ...result } = user;
+  console.log('✅ User validated successfully');
+  return result;
   }
 
   async register(registerDto: RegisterDto): Promise<{
@@ -40,6 +58,7 @@ export class AuthService {
       nameEn: string;
       nameAr: string;
       role: string;
+      isActive: boolean;
     };
     access_token: string;
   }> {
@@ -50,17 +69,18 @@ export class AuthService {
     }
 
     // Hasher le mot de passe
-    const hashedPassword = await bcrypt.hash(registerDto.password, 10);
-    this.logger.debug(`Password hash created`);
+    //const hashedPassword = await bcrypt.hash(registerDto.password, 10);
+    //this.logger.debug(`Password hash created`);
 
     // Créer l'utilisateur
     const userData ={
       email: registerDto.email,
-      password: hashedPassword,  // HASHÉ !
+      password: registerDto.password,  // HASHÉ !
       nameEn: registerDto.nameEn,
       nameAr: registerDto.nameAr,
       phone: registerDto.phone,
       role: registerDto.role || UserRole.USER,
+      isActive: registerDto.isActive,
     }
     const user = await this.usersService.create(userData);
 
@@ -80,6 +100,7 @@ export class AuthService {
         nameEn: user.name_en,
         nameAr: user.name_ar,
         role: user.role,
+        isActive: user.isActive
       },
       access_token: accessToken,
     };
