@@ -1,18 +1,20 @@
 import Link from 'next/link';
-import { 
-  Facebook, 
-  Twitter, 
-  Instagram, 
-  Linkedin, 
-  Mail, 
-  Phone, 
-  MapPin, 
-  Shield, 
-  Truck, 
-  CreditCard, 
+import {
+  Facebook,
+  Twitter,
+  Instagram,
+  Linkedin,
+  Mail,
+  Phone,
+  MapPin,
+  Shield,
+  Truck,
+  CreditCard,
   Headphones,
   Heart
 } from 'lucide-react';
+import { features } from 'process';
+import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal, Key } from 'react';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -21,7 +23,7 @@ export default function Footer() {
     boutique: [
       { label: 'Tous les produits', href: '/products' },
       { label: 'Nouveautés', href: '/products?sort=newest' },
-      { label: 'Meilleures ventes', href: '/products?sort=popular' },
+      { label: 'Les plus vendus', href: '/products?sort=popular' },
       { label: 'Promotions', href: '/products?sort=discount' },
       { label: 'Produits en vedette', href: '/products/featured' },
     ],
@@ -29,23 +31,23 @@ export default function Footer() {
       { label: 'Freinage', href: '/categories/11111111-1111-1111-1111-111111111111' },
       { label: 'Moteur', href: '/categories/22222222-2222-2222-2222-222222222222' },
       { label: 'Suspension', href: '/categories/33333333-3333-3333-3333-333333333333' },
-      { label: 'Électricité', href: '/categories/44444444-4444-4444-4444-444444444444' },
-      { label: 'Filtration', href: '/categories/55555555-5555-5555-5555-555555555555' },
+      { label: 'Électrique', href: '/categories/44444444-4444-4444-4444-444444444444' },
+      { label: 'Filtres', href: '/categories/55555555-5555-5555-5555-555555555555' },
     ],
     informations: [
-      { label: 'À propos de nous', href: '/about' },
+      { label: 'À propos', href: '/about' },
       { label: 'Contactez-nous', href: '/contact' },
       { label: 'Livraison', href: '/shipping' },
       { label: 'Paiement sécurisé', href: '/payment' },
       { label: 'Retours et échanges', href: '/returns' },
       { label: 'FAQ', href: '/faq' },
-      { label: 'CGV', href: '/terms' },
+      { label: 'Termes et conditions', href: '/terms' },
       { label: 'Politique de confidentialité', href: '/privacy' },
     ],
     mon_compte: [
-      { label: 'Mon compte', href: '/profile' },
+      { label: 'Mon profil', href: '/profile' },
       { label: 'Mes commandes', href: '/orders' },
-      { label: 'Mes favoris', href: '/wishlist' },
+      { label: 'Favoris', href: '/wishlist' },
       { label: 'Historique', href: '/history' },
       { label: 'Adresses', href: '/addresses' },
     ],
@@ -54,7 +56,7 @@ export default function Footer() {
   const features = [
     {
       icon: <Truck className="w-6 h-6" />,
-      title: 'Livraison rapide',
+      title: 'Livraison Rapide',
       description: 'Expédition sous 24-48h',
     },
     {
@@ -64,13 +66,13 @@ export default function Footer() {
     },
     {
       icon: <CreditCard className="w-6 h-6" />,
-      title: 'Paiement sécurisé',
-      description: 'CB, PayPal, virement',
+      title: 'Paiement Sécurisé',
+      description: 'Carte, PayPal, Virement',
     },
     {
       icon: <Headphones className="w-6 h-6" />,
-      title: 'Support 7j/7',
-      description: 'Assistance technique',
+      title: 'Support 7/7',
+      description: 'Support technique',
     },
   ];
 
@@ -93,7 +95,7 @@ export default function Footer() {
       <div className="bg-gray-800 py-6">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {features.map((feature, index) => (
+            {features.map((feature: { icon: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; title: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; description: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; }, index: Key | null | undefined) => (
               <div key={index} className="flex items-center space-x-4">
                 <div className="w-12 h-12 bg-blue-600/10 rounded-full flex items-center justify-center">
                   <div className="text-blue-400">
@@ -124,15 +126,15 @@ export default function Footer() {
                 <span className="block text-sm text-blue-400 font-medium">Store</span>
               </div>
             </Link>
-            
+
             <p className="text-gray-400 mb-6 max-w-md">
-              Votre destination de confiance pour des pièces automobiles de qualité. 
-              Nous fournissons des pièces authentiques avec garantie et livraison rapide dans tout le Maroc.
+              Votre destination de confiance pour des pièces automobiles de haute qualité.
+              Nous fournissons des pièces d'origine avec garantie et livraison rapide partout en Algérie.
             </p>
-            
+
             {/* Newsletter */}
             <div className="mb-8">
-              <h4 className="text-white font-semibold mb-4">Inscrivez-vous à notre newsletter</h4>
+              <h4 className="text-white font-semibold mb-4">Abonnez-vous à notre newsletter</h4>
               <form className="flex">
                 <input
                   type="email"
@@ -205,7 +207,7 @@ export default function Footer() {
 
         {/* Payment Methods */}
         <div className="mt-8">
-          <h4 className="text-white font-semibold mb-4">Moyens de paiement acceptés</h4>
+          <h4 className="text-white font-semibold mb-4">Méthodes de paiement acceptées</h4>
           <div className="flex flex-wrap gap-3">
             {['Visa', 'MasterCard', 'PayPal', 'CIH', 'BMCE', 'Attijari'].map((method) => (
               <div
@@ -228,16 +230,16 @@ export default function Footer() {
                 © {currentYear} AutoParts Store. Tous droits réservés.
               </p>
               <p className="text-sm text-gray-600 mt-1">
-                Made with <Heart className="w-4 h-4 inline text-red-500" /> in Algeria
+                Fait avec <Heart className="w-4 h-4 inline text-red-500" /> en Algérie
               </p>
             </div>
-            
+
             <div className="flex flex-wrap justify-center gap-4">
               <Link href="/terms" className="text-gray-500 hover:text-white text-sm">
-                Conditions générales
+                Conditions Générales
               </Link>
               <Link href="/privacy" className="text-gray-500 hover:text-white text-sm">
-                Confidentialité
+                Politique de confidentialité
               </Link>
               <Link href="/cookies" className="text-gray-500 hover:text-white text-sm">
                 Cookies

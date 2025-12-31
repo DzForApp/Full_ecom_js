@@ -1,4 +1,5 @@
 import { Star, ShoppingCart } from 'lucide-react';
+import Image from 'next/image';
 
 interface ProductCardProps {
   product: {
@@ -18,7 +19,9 @@ export default function ProductCard({ product }: ProductCardProps) {
       <div className="relative overflow-hidden">
         <div className="h-48 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
           {/* Image placeholder - remplacer par <Image /> de Next.js */}
-          <div className="text-4xl">🚗</div>
+          <div className="text-4xl">
+            <Image width={200}  height={100} src={'/p.jpg'} alt={''} />
+          </div>
         </div>
         {product.discount && (
           <div className="absolute top-4 left-4 bg-red-600 text-white px-3 py-1 rounded-full text-sm font-bold">

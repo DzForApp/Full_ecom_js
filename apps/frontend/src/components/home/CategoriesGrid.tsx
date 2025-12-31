@@ -43,7 +43,7 @@ export default function CategoriesGrid({ categories }: CategoriesGridProps) {
               </div>
             </div>
           </div>
-          
+
           <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow">
             <div className="flex items-start space-x-4">
               <div className="w-12 h-12 bg-green-50 rounded-lg flex items-center justify-center">
@@ -55,7 +55,7 @@ export default function CategoriesGrid({ categories }: CategoriesGridProps) {
               </div>
             </div>
           </div>
-          
+
           <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow">
             <div className="flex items-start space-x-4">
               <div className="w-12 h-12 bg-purple-50 rounded-lg flex items-center justify-center">
@@ -67,7 +67,7 @@ export default function CategoriesGrid({ categories }: CategoriesGridProps) {
               </div>
             </div>
           </div>
-          
+
           <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow">
             <div className="flex items-start space-x-4">
               <div className="w-12 h-12 bg-yellow-50 rounded-lg flex items-center justify-center">
@@ -85,11 +85,11 @@ export default function CategoriesGrid({ categories }: CategoriesGridProps) {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10">
           <div className="mb-6 md:mb-0">
             <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-3">
-              Shop <span className="text-blue-600">Departments</span>
+              Nos <span className="text-blue-600">Catégories</span>
             </h2>
             <p className="text-gray-600 text-lg">Parcourez nos catégories de pièces automobiles</p>
           </div>
-          
+
           <div className="flex items-center space-x-4">
             <div className="hidden md:block">
               <div className="flex space-x-2">
@@ -119,7 +119,7 @@ export default function CategoriesGrid({ categories }: CategoriesGridProps) {
           {categories.map((category) => {
             const icon = categoryIcons[category.name] || categoryIcons.default;
             const reviewCount = Math.floor(Math.random() * 5); // For demo - replace with actual data
-            
+
             return (
               <Link
                 key={category.id}
@@ -156,7 +156,7 @@ export default function CategoriesGrid({ categories }: CategoriesGridProps) {
                     <h3 className="text-lg font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors line-clamp-2">
                       {category.name}
                     </h3>
-                    
+
                     {category.description && (
                       <p className="text-gray-600 text-sm mb-4 line-clamp-2">
                         {category.description}

@@ -1,4 +1,3 @@
-'use client';
 
 import { useState, useEffect } from 'react';
 import ProductCard from '@/components/products/ProductCard';
@@ -6,6 +5,7 @@ import { Product } from '@/lib/api/services';
 import { productService, categoryService } from '@/lib/api/services';
 import { Filter, Search, Grid, List } from 'lucide-react';
 import { featuredProducts } from '@/data/homeData';
+import ProductCardMini from './ProductCardMini';
 
 export default function ProductsList() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -29,14 +29,15 @@ export default function ProductsList() {
     try {
       const params: any = {};
       if (filters.search) params.search = filters.search;
-      //if (filters.categoryId) params.categoryId = filters.categoryId;
-      //if (filters.minPrice) params.minPrice = filters.minPrice;
-      //if (filters.maxPrice) params.maxPrice = filters.maxPrice;
-      //if (filters.inStock) params.inStock = filters.inStock;
+      if (filters.categoryId) params.categoryId = filters.categoryId;
+      if (filters.minPrice) params.minPrice = filters.minPrice;
+      if (filters.maxPrice) params.maxPrice = filters.maxPrice;
+      if (filters.inStock) params.inStock = filters.inStock;
 
       const data = await productService.getAll();
+      
       //const data = featuredProducts
-
+        console.log("loading products")
       setProducts(data.products || []);
     } catch (error) {
       console.error('Failed to load products:', error);
@@ -48,6 +49,7 @@ export default function ProductsList() {
   const loadCategories = async () => {
     try {
       const data = await categoryService.getAll();
+      console.log("loading categories")
       setCategories(data);
     } catch (error) {
       console.error('Failed to load categories:', error);
@@ -74,10 +76,10 @@ export default function ProductsList() {
             ))}
           </div>
         ) : products.length > 0 ? (
-           <div className={'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'
+           <div className={'grid grid-cols-1 md:grid-cols-4 lg:grid-cols-4 gap-4 bg-white p-4'
                 }>
             {products.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCardMini key={product.id} product={product} />
             ))}
           </div>
         ) : (

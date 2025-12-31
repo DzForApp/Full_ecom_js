@@ -80,7 +80,7 @@ export const productService = {
   getAll: async (params?: any) => {
     const response = await api.get('/products', { params });
     console.log('la fonction api axios getAll of product run correctly')
-    return response.data;
+    return (await response).data;
   },
 
   getFeatured: async (limit = 8) => {

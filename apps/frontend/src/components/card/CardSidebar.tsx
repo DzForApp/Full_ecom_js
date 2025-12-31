@@ -47,9 +47,8 @@ export default function CardSidebar({ isOpen, onClose }: CardSidebarProps) {
 
       {/* Sidebar */}
       <div
-        className={`fixed top-0 right-0 h-full w-full md:w-96 bg-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out ${
-          isOpen ? 'translate-x-0' : 'translate-x-full'
-        }`}
+        className={`fixed top-0 right-0 h-full w-full md:w-96 bg-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-full'
+          }`}
       >
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b">
@@ -126,7 +125,7 @@ export default function CardSidebar({ isOpen, onClose }: CardSidebarProps) {
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center bg-gray-100 rounded-lg">
-                          <span className="text-gray-400 text-xs">No image</span>
+                          <span className="text-gray-400 text-xs">Pas d'image</span>
                         </div>
                       )}
                     </div>
@@ -141,10 +140,10 @@ export default function CardSidebar({ isOpen, onClose }: CardSidebarProps) {
                         {item.product.name}
                       </Link>
                       <p className="text-lg font-bold text-blue-600 mt-1">
-                        {(item.product.price * item.quantity).toFixed(2)} DH
+                        {(item.product.price * item.quantity).toFixed(2)} DA
                       </p>
                       <p className="text-sm text-gray-500">
-                        {item.product.price.toFixed(2)} DH × {item.quantity}
+                        {item.product.price.toFixed(2)} DA × {item.quantity}
                       </p>
                     </div>
 
@@ -154,11 +153,10 @@ export default function CardSidebar({ isOpen, onClose }: CardSidebarProps) {
                         <button
                           onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
                           disabled={item.quantity <= 1}
-                          className={`w-8 h-8 flex items-center justify-center rounded-lg ${
-                            item.quantity <= 1
+                          className={`w-8 h-8 flex items-center justify-center rounded-lg ${item.quantity <= 1
                               ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
                               : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
-                          }`}
+                            }`}
                         >
                           <Minus className="w-4 h-4" />
                         </button>
@@ -193,21 +191,21 @@ export default function CardSidebar({ isOpen, onClose }: CardSidebarProps) {
             <div className="flex justify-between items-center mb-4">
               <span className="text-gray-600">Sous-total</span>
               <span className="text-xl font-bold text-gray-900">
-                {total.toFixed(2)} DH
+                {total.toFixed(2)} DA
               </span>
             </div>
 
             {/* Tax Estimate */}
             <div className="flex justify-between items-center mb-2 text-sm text-gray-500">
               <span>Estimation TVA</span>
-              <span>{(total * 0.2).toFixed(2)} DH</span>
+              <span>{(total * 0.2).toFixed(2)} DA</span>
             </div>
 
             {/* Total */}
             <div className="flex justify-between items-center mb-6 pt-4 border-t">
               <span className="text-lg font-semibold">Total</span>
               <span className="text-2xl font-bold text-blue-600">
-                {(total * 1.2).toFixed(2)} DH
+                {(total * 1.2).toFixed(2)} DA
               </span>
             </div>
 

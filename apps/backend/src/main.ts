@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module'; 
 import { ValidationPipe } from '@nestjs/common';
+import { METHODS } from 'http';
 
 
 async function bootstrap() {
@@ -13,7 +14,12 @@ async function bootstrap() {
     transform: true, // transforme automatiquement les types (string -> number, etc.)
   }));
   
-  await app.listen(process.env.PORT ?? 3000);
+  app.enableCors({
+    origin: 'http://localhost:3000', // Your frontend URL
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  })
+  await app.listen(process.env.PORT ?? 3001);
 
  }
 bootstrap();
